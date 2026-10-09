@@ -1,0 +1,11 @@
+# 빌드 산출물
+*.o
+*.out
+a.out
+build/
+
+# 실습 실행 파일 및 출력물
+study/**/*
+!study/**/*.c
+!study/**/*.h
+!study/**/
