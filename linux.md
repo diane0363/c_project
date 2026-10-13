@@ -58,7 +58,7 @@
 - Windows `cmd`는 현재 폴더를 먼저 검색하지만, Linux는 **보안상** 하지 않음 (악성 `ls` 파일 문제)
 
 ```bash
-echo $PATH
+echo $PATH    # echo는 화면 출력 명령어 
 which ls      # /usr/bin/ls
 ```
 
