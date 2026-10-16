@@ -2,7 +2,7 @@
 
 > 최종 목표: C로 CHIP-8 에뮬레이터 구현
 > 환경: Windows 10 + WSL2(Ubuntu) + gcc + gdb + VS Code
-> 컴파일 기본 옵션: `-Wall -Wextra -g -fsanitize=address`
+> 컴파일 기본 옵션: `gcc -std=c17 -Wall -Wextra -g -fsanitize=address -o 출력 소스.c`
 
 ---
 
@@ -137,6 +137,9 @@ uint8_t n     = opcode & 0x0F;        // 맨 끝 자리
 
 ### printf 포맷
 - `%u` unsigned, `%d` signed int, `%02X` 16진수 대문자·2자리·0채움.
+- `%p` void *
+- char, short, uint8_t, uint16_t의 경우 printf에 들어가면, int로 승격이 된다.
+- float은 double로 승격. -> 그래서 %lf가 아닌 %f도 사용가능한 것?
 
 ---
 
