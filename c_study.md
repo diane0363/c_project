@@ -203,9 +203,9 @@ int main(void)
   - gdb로 보는 법
   '''bash
     gdb ./parity
-    (gdb) break main
-    (gdb) run
-    (gdb) next          # scanf까지 진행하며 -7 입력
+    (gdb) b main
+    (gdb) r
+    (gdb) n          # scanf까지 진행하며 -7 입력
     (gdb) print/t n     # /t = 이진수로 출력
     (gdb) print/x n     # /x = 16진수로 출력
   '''
@@ -240,6 +240,7 @@ int main(void)
     printf("%c\n", *t3 + 1); /* b : 다음 바이트 */
     printf("%s\n", t3);      /* ab : 주소를 받아 \0을 만날 때까지 출력 */
     printf("%d\n", *t3);     /* 97 : 첫 바이트를 정수로 출력 */
+    printf("%c\n", t ^ 0x20) /* A : 97 ^ 0x20 -> 65 => A */
   ```
 
 ## 19-2. 비트로 알파벳 대소문자 변경
@@ -356,4 +357,78 @@ int main(void)
 
 ## 23-2. for문..
 
-##
+## 25-1. debugging
+  ```c
+  //방법 1
+    for (int i = 2; i <= num; i++) {
+        // i가 소수인지 체크
+        for (int j = 2; j <= i; j++) {
+            if (i % j == 0 && i != j) {
+                break; // i가 소수가 아니면 break
+            }
+            // 본인과 나눌 때까지도 break 되지 않았다면 소수 카운트
+            if (i == j) {
+                pr_cnt += 1;
+            }
+        }
+    }
+  ```
+
+  ```c
+  // 방법2 & 디버깅 결과
+      for (int i = 2; i <= num; i++) {
+          pr_flag = true;
+          for (int j = 2; j * j <= num; j++) { // line 35
+              if (i % j == 0) {
+                  pr_flag = false;
+                  break;
+              }
+          }
+          if (pr_flag == true) {
+              pr_cnt++;
+          }
+      }
+  ```
+
+  ** 문제 1 **
+  ```bash
+  (gdb) i lo
+  j = 2
+  i = 2
+  num = 11
+  pr_flag = true
+  pr_cnt = 0
+  ```
+  ** 문제 2 **
+  ```bash
+  (gdb) b 35
+  Breakpoint 1 at 0x1415: file main.c, line 35.
+  (gdb) r
+  Starting program: /home/di/c_project/study/main
+  [Thread debugging using libthread_db enabled]
+  Using host libthread_db library "/usr/lib/x86_64-linux-gnu/libthread_db.so.1".
+  정수 입력: 2
+  2~2까지 소수의 개수는 1개입니다
+  [Detaching after fork from child process 28832]
+  ==28818==LeakSanitizer has encountered a fatal error.
+  ==28818==HINT: For debugging, try setting environment variable LSAN_OPTIONS=verbosity=1:log_threads=1
+  ==28818==HINT: LeakSanitizer does not work under ptrace (strace, gdb, etc)
+  [Inferior 1 (process 28818) exited with code 01]
+  -----------------------------------------------------------------------------
+  (gdb) b 35
+  Note: breakpoint 1 also set at pc 0x555555555415.
+  Breakpoint 2 at 0x555555555415: file main.c, line 35.
+  (gdb) r
+  Starting program: /home/di/c_project/study/main
+  [Thread debugging using libthread_db enabled]
+  Using host libthread_db library "/usr/lib/x86_64-linux-gnu/libthread_db.so.1".
+  정수 입력: 3
+  2~3까지 소수의 개수는 2개입니다
+  [Detaching after fork from child process 29637]
+  ==29625==LeakSanitizer has encountered a fatal error.
+  ==29625==HINT: For debugging, try setting environment variable LSAN_OPTIONS=verbosity=1:log_threads=1
+  ==29625==HINT: LeakSanitizer does not work under ptrace (strace, gdb, etc)
+  [Inferior 1 (process 29625) exited with code 01]
+  */
+
+  ```

@@ -194,7 +194,7 @@ gcc -Wall -Wextra -g -o emulator main.c cpu.c   # .c 전부 나열, .h는 안 �
 - [x] Step 1: 환경 · 컴파일 옵션 · gdb · checksec
 - [x] Step 2-1: 고정폭 타입 · wraparound · CHIP-8 구조
 - [x] Step 2-2: 컴파일 모델 (선언/정의 · 헤더 · 링크)
-- [ ] Step 2-3: char는 정수다 · bool · 조건식  ← 다음
-- [ ] Step 2-4: printf 포맷 지정자
+- [x] Step 2-3: char는 정수다 · bool · 조건식  ← 다음
+- [x] Step 2-4: printf 포맷 지정자
 - [ ] Step 3: 포인터와 메모리 모델
 - [ ] Step 4~8: 동적 메모리 · 구조체 · 비트 연산 · 파일 I/O · CHIP-8 구현
