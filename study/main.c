@@ -1,49 +1,21 @@
 /*
-[문제26] 모든 알파벳 출력하기
-반복문을 이용하여 대문자 'A'에서 소문자 'z'까지의 ASCII값을 아래와 같이 출력하시오
-이때 알파벳 사이 특수문자는 출력하지 말 것.
-한 줄당 5개씩 출력하고, 소문자가 시작되면 새로운 줄로 바꿀 것. for, continue, break 중 사용
-1) 실행결과
-A = 65  B = 66  C = 67  D = 68  E = 69
-F = 70  G = 71  H = 72  I = 73  J = 74
-*/
-/*
-비트 연산 : ^ (비트 스위치?)
-알파벳 : 32 차이 (A:65, a:97), A~Z 26 (Z:90)
-    => 0010 0000 (2^5)
+[문제32] 요일 구하기
+년/월을 입력한 후 해당 월의 1일이 무슨 요일인지 구하는 프로그램을 작성하시오,
+(참고 : 서기 1년 1월 1일은 월요일)
+1) 실행 예
+연도와 월을 차례로 입력: 2026 1
+2026년1월1일 목요일
 */
 #include <stdio.h>
 
 int main(void) {
-    int alp = 'A';
-    int end = 'Z';
+    int year;
+    int month;
 
-    // A ~ Z 까지 출력
-    // for (alp; alp < (alp + 26); alp++) { // 영원히 멈추지 않아...
-    for (alp; alp <= end; alp++) {
-        int l_cnt = 0;
-        printf("%c = %d\t", alp, alp);
-        if (l_cnt++ && l_cnt == 5) {
-            printf("\n");
-        }
-    }
-    // a ~ z 까지 출력 alp ^ 0x20
-    end = end ^ 0x20;
-    alp = (end - 26) ^ 0x20;
-    for (alp; alp <= end; alp++) {
-        int l_cnt = 0;
-        printf("%c = %d\t", alp, alp);
-        if (l_cnt++ && l_cnt == 5) {
-            printf("\n");
-        }
+    printf("연도와 월을 차례로 입력: ");
+    fflush(stdout);
+    if (scanf("%d", )) {
     }
 
     return 0;
 }
-/*
-        if (alp == end && alp != 'z') {
-            alp = alp ^ 0x20;
-            end = end ^ 0x20;
-            printf("\n");
-        }
-*/

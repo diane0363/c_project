@@ -4,3 +4,4 @@ MaxEmptyLinesToKeep: 1
 AllowShortIfStatementsOnASingleLine: Never
 AllowShortFunctionsOnASingleLine: None
 ReflowComments: false
+SeparateDefinitionBlocks: Always
