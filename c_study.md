@@ -1,9 +1,20 @@
+```bash
 gcc -Wall -Wextra -Wconversion -std=c17 -g -fsanitize=address -o main main.c && ./main
 ./out                 # 두 줄 모두 화면에 보임
 ./out > result.txt    # 화면에는 "에러 메시지"만 보임
 cat result.txt        # "정상 결과"만 들어 있음
 ./out 2> err.txt      # 화면에는 "정상 결과"만, err.txt에는 "에러 메시지"
 
+(gdb)
+# gdb와 LeakSanitizer가 같은 프로세스를 동시에 ptrace하려다가 충돌 -> LSan의 오류로 exit(1)
+# LSan이 clone()으로 tracer 자식 생성 (fork)
+[Detaching after fork from child process 74775]
+==74676==LeakSanitizer has encountered a fatal error.
+==74676==HINT: For debugging, try setting environment variable LSAN_OPTIONS=verbosity=1:log_threads=1
+==74676==HINT: LeakSanitizer does not work under ptrace (strace, gdb, etc)
+[Inferior 1 (process 74676) exited with code 01]
+
+```
 ```c
 #include <stdio.h>
 
@@ -469,3 +480,48 @@ int main(void)
         }
     }
 ```
+
+## 32-1. 배열 인덱싱, 슬라이싱
+  - 함수는 배열이 아니라, 포인터를 받는다.
+  - 포인터에는 길이 정보 X
+  ---------------------------------
+  - 인덱싱은 지원O (JAVA O, PY O)
+  - 범위 밖 접근검사 지원X (JAVA O, PY O)
+  - 슬라이싱 지원X (JAVA X, PY O)
+  - SUM() 지원X (JAVA O, PY O)
+
+## 32-2. const, static
+- const 는 바로 왼쪽에 있는 것을 고정. 왼쪽에 아무것도 없다면 오른쪽을 고정
+  ```c
+  const char *weekdays[] = {"월요일", "화요일"};
+
+  weekdays[0][0] = "수요일" // 컴파일 에러 (배열 값 변경하기 - 불가)
+  weekdays[0] = "수요일" // 허용. (배열에 다른 주소 넣기)
+  ```
+
+  ```c
+  const char *const weekdays[] = {"월요일", "화요일"};
+  // 배열 포인터 변경 X, 배열 값 변경X..
+
+  ```
+- static
+  - Java의 static과는 다르다.
+  - 위치에 따라 달라짐
+    1. 스택이 아닌 정적 영역에 저장
+      - Data/Static Area : 프로그램 시작 시 크기 고정 -> 종료까지 유지
+      - Heap : 실행 중 사용자가 직접 크기를 결정해 동적으로 할당 & 해제 (new, malloc)
+      - Stack : 함수가 호출될 때 생성되는 지역 변수, 매개 변수 저장 (함수 실행 중에만)
+
+      | **구분** | **정적 영역 (Static)** | **힙 영역 (Heap)** | **스택 영역 (Stack)** |
+      | --- | --- | --- | --- |
+      | **저장 변수** | 전역 변수, static 변수 | 동적 할당 변수 (`new`, `malloc`) | 지역 변수, 매개 변수 |
+      | **할당/해제** | 프로그램 시작 시 / 종료 시 | 개발자가 원할 때 (수동/GC) | 함수 시작 시 / 함수 종료 시 |
+      | **메모리 크기** | 고정됨 | 크고 유연함 (RAM이 허용하는 한) | 작고 제한적임 (보통 수 MB) |
+      | **접근 속도** | 빠름 | 느림 (포인터 참조 필요) | **매우 빠름** |
+
+    2. 함수 밖(파일 최상위)
+      - 보이는 범위 변경
+      ```c
+      static int helper_count = 0;           /* 이 .c 파일 안에서만 보임 */
+      static bool is_leap_year(int year);    /* 이 .c 파일 안에서만 호출 가능 */
+      ```
