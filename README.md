@@ -56,7 +56,8 @@
 ### 정수 타입의 세계관 차이
 - **Python:** `int` 무한 정밀도. 크기 걱정 없음.
 - **Java:** 크기 고정, 거의 전부 signed. unsigned 없음.
-- **C:** 크기 고정 + signed/unsigned 선택 + **넘치면 wraparound(한 바퀴 돎)**.
+- **C:** 크기 고정 + signed/unsigned 선택 + unsigned의 경우 **넘치면 wraparound(한 바퀴 돎)**.
+  - (signed)int의 경우 UB
 
 ### `#include <stdint.h>` 고정폭 타입
 | 타입 | 크기 | 범위 | CHIP-8 용도 |
@@ -66,6 +67,7 @@
 | `int` | 보통 4B | 약 ±21억 | 범용 계산, 루프 카운터 |
 
 - **언제 뭘 쓰나:** 범용 코드는 `int`가 기본/정답. **크기 자체가 의미인 도메인**(임베디드, 프로토콜, 암호화, **에뮬레이터**)에서만 고정폭 타입. → CHIP-8이라서 `uint8_t`를 쓰는 것.
+- uint (unsigned integer 의 약자)
 
 ### wraparound (핵심)
 - `uint8_t`는 255 초과 시 예외도 확장도 없이 **조용히 `값 % 256`으로 돌아감.**
