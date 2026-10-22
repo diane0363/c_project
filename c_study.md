@@ -525,3 +525,35 @@ int main(void)
       static int helper_count = 0;           /* 이 .c 파일 안에서만 보임 */
       static bool is_leap_year(int year);    /* 이 .c 파일 안에서만 호출 가능 */
       ```
+
+## 33-1. int의 오버플로우는 UB / double의 오버플로우는 inf
+
+## 33-2. int × int는 반드시 long long에 들어간다
+  - int : 32비트, long long : 63비트
+  - int x int : 어떤 경우에도 long long의 범위를 넘지 않는다. => 오버플로우 X
+
+## 33-3. 반복해서 곱하는 대신, 지수를 이진수로 보고 제곱 -> log₂(exp) 번 반복 Wow
+  ```c
+  while (exp > 0) {
+      if (exp & 1) {          /* 지수의 최하위 비트가 1이면 */
+          result *= base;     /* 현재 base를 결과에 곱함 */
+      }
+      base *= base;           /* base를 제곱: 3 → 3² → 3⁴ → 3⁸ */
+      exp >>= 1;              /* 지수를 오른쪽으로 한 비트 */
+  }
+  ```
+
+## 33-4. assert vs if
+  - 사용자의 입력 검증 : if
+  - 코드 검증 : assert
+
+## 33-5. goto
+  - 해당 라벨로 이동 (like switch case:)
+  ```c
+  goto LABEL;
+
+  LABEL:
+    fprintf(stderr, "어쩌고");
+    exit(1);
+    // exit보다는 bool과 포인터를 이용해 전달하는 방법이 더 좋다.
+  ```
