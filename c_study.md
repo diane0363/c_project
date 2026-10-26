@@ -5,6 +5,8 @@ gcc -Wall -Wextra -Wconversion -std=c17 -g -fsanitize=address -o main main.c && 
 cat result.txt        # "정상 결과"만 들어 있음
 ./out 2> err.txt      # 화면에는 "정상 결과"만, err.txt에는 "에러 메시지"
 
+gdb -q ./main
+
 (gdb)
 # gdb와 LeakSanitizer가 같은 프로세스를 동시에 ptrace하려다가 충돌 -> LSan의 오류로 exit(1)
 # LSan이 clone()으로 tracer 자식 생성 (fork)
@@ -565,14 +567,29 @@ int main(void)
   int c = getchar();
   ```
 
-## 36-2. 입력버퍼의 남은 값들 비우기
+## 35-2. 입력버퍼의 남은 값들 비우기
   - '\n' : "해당 줄을 모두 소비했다"
   - 사용자가 엔터만 누른 상태'\n'에서 버퍼를 비우면, 다음에 입력될 줄을 비우게 된다.
   -
 
-## 36-3. do ~ while
+## 35-3. do ~ while
   ```c
   do {
     /* 최소 한번은 실행 */
   } while (cond); /* 세미콜론 필수! */
   ```
+
+## 36-1. 재귀 함수
+
+## 36-2. debugging
+  - info b : 현재 걸린 bf 리스트
+  - delete num : bf 리스트에서 #n bf 삭제
+  - bt (backtrace) : 현재 쌓여있는 호출 (stack)
+  - 호출자(d9b0) > 자신(d980) > 피호출자(d950): 스택은 낮은 주소 방향으로
+  - 프레임 사이 간격은 0x30 = 48바이트
+
+## 36-3. 누적 재귀함수 (36_1.c)
+
+## 36-4. C에서의 static 함수
+  - 함수를 해당 파일 안에서만 보이게 하는 키워드 (내부 구현용 함수에 붙인다.) -> Java의 private와 비슷한 역할
+
