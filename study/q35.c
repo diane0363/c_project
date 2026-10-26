@@ -42,7 +42,7 @@ int main(void) {
         }
         printf("입력된 번호 : %c\n", choice);
 
-    } while (choice == '5');
+    } while (choice != '5');
 
     return 0;
 }
