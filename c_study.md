@@ -662,3 +662,10 @@ int main(void)
   main () at main.c:30
   30                  arr[left--] = num;
   ```
+
+## 39-1. 교환 정렬, 버블 정렬
+
+## 39-2. 함수에 배열 길이를 함께 넣지 않는다면?
+  - b_sort(int *arr, int length); 가 아닌
+  - b_srot(int *arr); 로 만드는 경우 배열의 0번째 요소만 함수로 넘어가기 때문에 포인터 변수의 크기만 반환!
+
