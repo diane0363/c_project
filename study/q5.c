@@ -12,34 +12,31 @@
 
 #include <stdio.h>
 
-int main(void)
-{
-  int price; 
-  int payment; 
-  int change;
-  
-  printf("상품 금액을 입력하세요 : ");
-  fflush(stdout);
-  if (scanf("%d", &price) != 1) {
-    fprintf(stderr, "상품 금액은 양의 정수로 입력\n");
-    return 1;
-  };
+int main(void) {
+    int price;
+    int payment;
+    int change;
 
-  
-  printf("받은 돈을 입력하세요 : ");  
-  fflush(stdout);
-  if (scanf("%d", &payment) != 1) {
-    fprintf(stderr, "받은 돈은 양의 정수로 입력\n");
-    return 1;
-  }
+    printf("상품 금액을 입력하세요 : ");
+    fflush(stdout); // 사용자 입력 대기
+    if (scanf("%d", &price) != 1) {
+        fprintf(stderr, "상품 금액은 양의 정수로 입력\n");
+        return 1;
+    };
 
-  if (payment < price) {
-    fprintf(stderr, "받은 돈은 상품 금액보다 크거나 같아야\n");
-    return 1;
-  }
+    printf("받은 돈을 입력하세요 : ");
+    fflush(stdout);
+    if (scanf("%d", &payment) != 1) {
+        fprintf(stderr, "받은 돈은 양의 정수로 입력\n");
+        return 1;
+    }
 
+    if (payment < price) {
+        fprintf(stderr, "받은 돈은 상품 금액보다 크거나 같아야\n");
+        return 1;
+    }
 
-  change = payment - price;
-  printf("거스름 돈은 %d원입니다.\n", change);
-  return 0;
+    change = payment - price;
+    printf("거스름 돈은 %d원입니다.\n", change);
+    return 0;
 }

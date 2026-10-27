@@ -593,3 +593,72 @@ int main(void)
 ## 36-4. C에서의 static 함수
   - 함수를 해당 파일 안에서만 보이게 하는 키워드 (내부 구현용 함수에 붙인다.) -> Java의 private와 비슷한 역할
 
+## 37-1. 배열의 길이 계산
+  ```c
+  int arr[10];
+  int length = sizeof(arr)/sizeof(arr[0]);
+  ```
+
+## 난수 생성 헤더파일
+  - rand() : 난수 생성 함수
+    - 0부터 RAND_MAX(일반적으로 32767) 사이의 큰 난수 반환
+    - 1~100까지의 수를 원한다면, (rand() % 100) + 1 사용
+  - srand() : 시드 설정 함수
+  - time() : 현재 시스템 시간 가져옴 => 시드 지정 (계속 랜덤값이 나오도록)
+
+  ```c
+  #include <stdlib.h> // rand(), srand()
+  #include <time.h>   // time()
+  ```
+
+## malloc()의 비용
+  1. 시간적 비용
+    - OS에 메모리를 욫어하고 할당받는 과정에서 CPU 사이클 소모
+  2. 메모리 단편화
+    - 잦은 복사와 할당/해제는 메모리 공간을 조각내어 이후 여유 공간이 있어도 큰 배열 생성에 제약 가능성
+
+## 38-1. debugging
+  - watch 변수 : 변수의 값이 변할 때마다 멈춰서 알려준다.
+  ```bash
+  (gdb) watch right
+  Hardware watchpoint 2: right
+  (gdb) watch left
+  Hardware watchpoint 3: left
+  (gdb) c
+  Continuing.
+  정수 10개를 입력하시오 : 1 2 3 4 5 6 7 8 9 10
+
+  Hardware watchpoint 2: right
+
+  Old value = 0
+  New value = 1
+  main () at main.c:28
+  28                  arr[right++] = num;
+  (gdb) c
+  Continuing.
+
+  Hardware watchpoint 3: left
+
+  Old value = 9
+  New value = 8
+  main () at main.c:30
+  30                  arr[left--] = num;
+  (gdb) c
+  Continuing.
+
+  Hardware watchpoint 2: right
+
+  Old value = 1
+  New value = 2
+  main () at main.c:28
+  28                  arr[right++] = num;
+  (gdb) c
+  Continuing.
+
+  Hardware watchpoint 3: left
+
+  Old value = 8
+  New value = 7
+  main () at main.c:30
+  30                  arr[left--] = num;
+  ```
