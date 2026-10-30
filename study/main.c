@@ -34,16 +34,15 @@ int main(void) {
         fprintf(stderr, "몰라..");
         return 1;
     }
+    // 개행으로 바꿔주기만 하면!
+    buf[btrcspn(buf, "\n")] = '\0';
 
     int result = palindrome(buf);
 
-    char buf2[BUF_SIZE];
-    memcpy(buf2, buf, strcspn(buf, "\n")); // 이렇게 되면 '\0' 공간 X
-
     if (result) {
-        printf("'%s'는 회문입니다.\n", buf2);
+        printf("'%s'는 회문입니다.\n", buf);
     } else {
-        printf("'%s'는 회문이 아닙니다.\n", buf2);
+        printf("'%s'는 회문이 아닙니다.\n", buf);
     }
 
     return 0;
@@ -54,12 +53,13 @@ int main(void) {
 회문이면 1, 아니면 0 리턴
 */
 int palindrome(const char *cp) {
-    int left = 0, right = strcspn(cp, "\n") - 1;
+    int left = 0, right = strlen(cp) - 1;
     while (right - left > 1) {
-        if (myToLower(cp[left++]) == myToLower(cp[right--])) {
-            continue;
-        } else {
+        if (myToLower(cp[left]) != myToLower(cp[right])) {
             return 0;
+        } else {
+            left++;
+            right--;
         }
     }
 
