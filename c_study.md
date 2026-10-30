@@ -770,3 +770,28 @@ int main(void)
   - isdisit()에 음수가 들어가면 UB
 
 
+## 44-1. fgets 의 '\n' - strcspn(const char *str1, const char *str2)
+  - <string.h> 내장
+  - str2 문자열에 포함된 문자가 나오기 전까지의 길이 반환
+  - buf[strcspn(buf, "\n")] = '\0' 으로 변환 가능
+  - strspn() 의 경우, 두번째 문자열이 있는 첫번째 문자열 길이 반환
+
+## 44-2. strlen(const char *str);
+  - '\0' 문자를 만날 때까지의 문자 개수 리턴
+
+## 44-3. '\n', '\0', NULL
+  - '\n' : 줄바꿈 (LF)  10
+  - '\0' : 널 문자      0
+  - NULL : 널 포인터    아무것도 가리키지 않는 주소
+  - '0'    : 숫자 문자  48
+
+## 44-4. size_t
+  - 메모리 안에 있는 객체의 크기를 담기 위한 부호 없는 정수 타입
+  - %zu 가 size_t의 전용 서식
+  - wrap 가능
+  - int와 함께 비교, 연산 시 int가 size_t로 반환
+  ```c
+  sizeof(x) // 결과 타입이 size_t
+  sizeof(s) // 반환 타입이 size_t
+  sizeof(n) // 매개변수 n의 타입이 size_t
+  ```

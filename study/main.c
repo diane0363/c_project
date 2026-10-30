@@ -17,12 +17,65 @@ int myToUpper(int ch);
 */
 
 #include <stdio.h>
+#include <string.h> // strlen(), strcspn()
+#define BUF_SIZE 100
 
 int palindrome(const char *cp); // 문자열을 읽기만 하므로 const 추가
 int myToLower(int ch);
 int myToUpper(int ch);
 
 int main(void) {
+    char buf[BUF_SIZE];
+
+    // 문자열 입력 받기
+    printf("문자열 입력: ");
+    fflush(stdout);
+    if (fgets(buf, sizeof buf, stdin) == NULL) {
+        fprintf(stderr, "몰라..");
+        return 1;
+    }
+
+    int result = palindrome(buf);
+
+    if (result) {
+        printf("'%s'는 회문입니다.\n", buf);
+    } else {
+        printf("'%s'는 회문이 아닙니다.\n", buf);
+    }
 
     return 0;
+}
+
+/*
+전달된 문자열의 회문 여부 검사
+회문이면 1, 아니면 0 리턴
+*/
+int palindrome(const char *cp) {
+    int left = 0, right = strcspn(cp, "\n") - 1;
+    while (right - left > 1) {
+        if (myToLower(cp[left++]) == myToLower(cp[right--])) {
+            continue;
+        } else {
+            return 0;
+        }
+    }
+
+    // 검사 완료 -> 회문 성공
+    return 1;
+}
+
+int myToLower(int ch) {
+    if (ch >= 'A' && ch <= 'Z') {
+        return ch + ('a' - 'A');
+    } else {
+        return ch;
+    }
+}
+
+int myToUpper(int ch) {
+    if (ch >= 'a' && ch <= 'z') {
+        return ch - ('a' - 'A');
+    } else {
+        return ch;
+    }
 }
