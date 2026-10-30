@@ -314,10 +314,10 @@ int main(void)
   tolower(c)
   ```
 
-  - 하지만, 인자가 `unsigned char` 범위(0~255)의 값이거나 `EOF`여야한다.
-  - 이 외의 값을 넣으면, UB.
+  - 하지만, 인자가 `unsigned char` 범위(0~255)의 값이거나 `EOF`여야한다. 그 외는 UB
   - 그런데 x86 Linux에서 char은 부호가 있는 타입! =>  (-128 ~ 127)
   - (unsigned char) 를 앞에 명시해주기~
+    - isdigit((unsigned char)c)
 
   ```c
   char c = '\xEA';     /* 한글 '가'의 첫 바이트 */
@@ -758,6 +758,15 @@ int main(void)
   - 배열의 주소가 포인터로 넘어갈 때 길이 정보는 사라진다.
     -> 길이를 따로 넘기거나, 끝 표시 (sentinel) 를 두거나.
 
-## 43-1. fgets
+## 43-1. fgets(buf, sizeof buf, stdin)
   - 한 줄을 입력받을 때 사용
-  -
+  - 최대 sizeof buf - 1글자를 읽고, 항상 끝에 '\0'
+  - 줄이 들어갈 자리가 있으면 '\n'까지 buf에 들어감
+  - 줄이 너무 길면 나머지는 입력 버퍼에 남는다. (35-2 참고)
+  - 반환값이 NULL이면 아무것도 읽지 못한 것
+
+## 43-2. unsigned char casting (19-3 참고)
+  - 한글을 입력하는 경우, x86의 signed char에서는 음수.
+  - isdisit()에 음수가 들어가면 UB
+
+
