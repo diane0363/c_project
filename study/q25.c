@@ -14,7 +14,6 @@
 2~11까지 소수의 개수는 5개입니다
 */
 
-#include <stdbool.h>
 #include <stdio.h>
 
 int main(void) {
