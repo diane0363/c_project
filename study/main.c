@@ -37,10 +37,13 @@ int main(void) {
 
     int result = palindrome(buf);
 
+    char buf2[BUF_SIZE];
+    memcpy(buf2, buf, strcspn(buf, "\n")); // 이렇게 되면 '\0' 공간 X
+
     if (result) {
-        printf("'%s'는 회문입니다.\n", buf);
+        printf("'%s'는 회문입니다.\n", buf2);
     } else {
-        printf("'%s'는 회문이 아닙니다.\n", buf);
+        printf("'%s'는 회문이 아닙니다.\n", buf2);
     }
 
     return 0;
