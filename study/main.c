@@ -1,84 +1,100 @@
 /*
-[문제44] 입력된 문자열이 회문인지 여부 확인하기
-회문(Palindrome)이란 앞으로 읽으나 뒤로 읽으나 차이가 없는 단어들을 말한다.
-예를 들어서“level”, “bob”과 같은 단어들은 회문에 속한다.
-인자로 전달되는 문자열이 화문인지 아닌지를 검사하여 주는 사용자 정의 함수를 구현하여 처리하며. 이 함수는 회문인 경우는1을 리턴하고
-아닐 경우는0을 리턴.
-이때 입력된 단어가 대, 소문자 섞여 입력되더라도 구분할 수 있어야 한다. (“Level”로 입력되더라도 회문으로 인식되어야 함.)
-1) 실행 예
-문자열 입력: Korea
-‘Korea’는 회문이 아닙니다.
-문자열 입력: Level
-‘Level’는 회문입니다.
-2) 함수 Prototype
-int palindrome(char *cp);
-int myToLower(int ch);
-int myToUpper(int ch);
+[문제45] 문자열 제어함수 작성
+System Library 중 문자열과 관련된 중요 함수인 strcpy(), strlen(), strcmp(), strcat() 함수가 있다.
+이 함수와 동일한 동작을 하는 ustrcpy(), ustrlen(), ustrcmp() 라는 이름의 사용자 정의 함수를 작성하고 테스트 하는 코드를 작성하시오
+1) 함수 Prototype
+// 1. 문자열의 길이 반환
+unsigned int ustrlen(const char *str) // 4바이트 반환
+size_t ustrlen(const char *str) // 8바이트 반환
+// 2. 두 문자열 s1과 s2를 사전순으로 비교
+// 두 문자열 같으면 0, s1이 작으면 음수, 크면 양수)
+int ustrcmp(const char *s1, const char *s2)
+// 3. src 문자열을 dest 문자열 끝에 연결 (Pointer 사용)
+char *ustrcat(char *dest, const char *src)
+// 4. src 문자열을 dest 문자열에 덮어씌움
+char *ustrcpy(char *dest, const char *src)
 */
 
 #include <stdio.h>
-#include <string.h> // strlen(), strcspn()
-#define BUF_SIZE 100
 
-int palindrome(const char *cp); // 문자열을 읽기만 하므로 const 추가
-int myToLower(int ch);
-int myToUpper(int ch);
+size_t ustrlen(const char *str);
+
+int ustrcmp(const char *s1, const char *s2);
+
+char *ustrcat(char *dest, const char *src);
+
+char *ustrcpy(char *dest, const char *src);
 
 int main(void) {
-    char buf[BUF_SIZE];
-
-    // 문자열 입력 받기
-    printf("문자열 입력: ");
-    fflush(stdout);
-    if (fgets(buf, sizeof buf, stdin) == NULL) {
-        fprintf(stderr, "몰라..");
-        return 1;
-    }
-    // 개행으로 바꿔주기만 하면!
-    buf[btrcspn(buf, "\n")] = '\0';
-
-    int result = palindrome(buf);
-
-    if (result) {
-        printf("'%s'는 회문입니다.\n", buf);
-    } else {
-        printf("'%s'는 회문이 아닙니다.\n", buf);
-    }
 
     return 0;
 }
 
 /*
-전달된 문자열의 회문 여부 검사
-회문이면 1, 아니면 0 리턴
+입력된 문자열의 길이 계산
 */
-int palindrome(const char *cp) {
-    int left = 0, right = strlen(cp) - 1;
-    while (right - left > 1) {
-        if (myToLower(cp[left]) != myToLower(cp[right])) {
-            return 0;
-        } else {
-            left++;
-            right--;
+size_t ustrlen(const char *str) {
+    char *p = &str;
+
+    while (*p != '\0') {
+        p++;
+    }
+
+    return p - str;
+}
+
+// size_t ustrlen(const char *str) {
+//     char *p = &str;
+//     size_t len = 0;
+
+//     while (*p != '\0') {
+//         len++;
+//         *p++;
+//     }
+
+//     return len;
+// }
+
+/*
+두 문자열 s1과 s2를 사전순으로 비교
+- 두 문자열 같으면 0, s1이 작으면 음수, 크면 양수
+*/
+int ustrcmp(const char *s1, const char *s2) {
+    char *p1 = &s1;
+    char *p2 = &s2;
+
+    while (true) {
+        if (*p1 == '\0' || *p2 == '\0') {
+            if (*p1 == '\0' && *p2 == '\0')
+                return 0;
+            else if (*p1 == '\0')
+                return -1;
+            else if (*p2 == '\0')
+                return 1;
+        } else if (*p1 == *p2) {
+            p1++;
+            p2++;
+            continue;
+        } else if (*p1 > *p2) {
+            return 1;
+        } else if (*p1 < *p2) {
+            return -1;
         }
     }
-
-    // 검사 완료 -> 회문 성공
-    return 1;
 }
 
-int myToLower(int ch) {
-    if (ch >= 'A' && ch <= 'Z') {
-        return ch + ('a' - 'A');
-    } else {
-        return ch;
+/*
+3. src 문자열을 dest 문자열 끝에 연결 (Pointer 사용)
+*/
+char *ustrcat(char *dest, const char *src) {
+    int len = ustrlen(dest);
+    char *pd = &dest;
+    char *ps = &src;
+
+    pd = pd + len;
+    while (*ps != '\0') {
+        *pd++ = *ps++;
     }
 }
 
-int myToUpper(int ch) {
-    if (ch >= 'a' && ch <= 'z') {
-        return ch - ('a' - 'A');
-    } else {
-        return ch;
-    }
-}
+char *ustrcpy(char *dest, const char *src);
