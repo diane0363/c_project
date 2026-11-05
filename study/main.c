@@ -21,7 +21,7 @@ size_t ustrlen(const char *str);
 
 int ustrcmp(const char *s1, const char *s2);
 
-char *ustrcat(char *dest, const char *src);
+void ustrcat(char *dest, const char *src);
 
 char *ustrcpy(char *dest, const char *src);
 
@@ -34,7 +34,7 @@ int main(void) {
 입력된 문자열의 길이 계산
 */
 size_t ustrlen(const char *str) {
-    char *p = &str;
+    const char *p = str;
 
     while (*p != '\0') {
         p++;
@@ -44,12 +44,12 @@ size_t ustrlen(const char *str) {
 }
 
 // size_t ustrlen(const char *str) {
-//     char *p = &str;
+//     char *p = &str;              // 이미 str은 포인터..
 //     size_t len = 0;
 
 //     while (*p != '\0') {
 //         len++;
-//         *p++;
+//         *p++;                  // 이건 포인터를 옮기는 것이 아닌, 값을 읽고 버림
 //     }
 
 //     return len;
@@ -63,30 +63,18 @@ int ustrcmp(const char *s1, const char *s2) {
     char *p1 = &s1;
     char *p2 = &s2;
 
-    while (true) {
-        if (*p1 == '\0' || *p2 == '\0') {
-            if (*p1 == '\0' && *p2 == '\0')
-                return 0;
-            else if (*p1 == '\0')
-                return -1;
-            else if (*p2 == '\0')
-                return 1;
-        } else if (*p1 == *p2) {
-            p1++;
-            p2++;
-            continue;
-        } else if (*p1 > *p2) {
-            return 1;
-        } else if (*p1 < *p2) {
-            return -1;
-        }
+    while (*p1 != '\0' && *p1 == *p2) {
+        p1++;
+        p2++;
     }
+
+    return (unsigned char)*p1 - (unsigned char)*p2;
 }
 
 /*
 3. src 문자열을 dest 문자열 끝에 연결 (Pointer 사용)
 */
-char *ustrcat(char *dest, const char *src) {
+void ustrcat(char *dest, const char *src) {
     int len = ustrlen(dest);
     char *pd = &dest;
     char *ps = &src;
