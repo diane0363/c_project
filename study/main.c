@@ -29,9 +29,6 @@ int main(void) {
 
     // 리터럴은 수정하면 무조건 UB.. 항상 const!!
     // 수정할 문자열은 항상 배열로
-    char *line1 = "abc";
-    char *line2 = "def";
-
     char line1[32] = "abc";
     const char *line2 = "def";
 
