@@ -21,11 +21,24 @@ size_t ustrlen(const char *str);
 
 int ustrcmp(const char *s1, const char *s2);
 
-void ustrcat(char *dest, const char *src);
+char *ustrcat(char *dest, const char *src);
 
 char *ustrcpy(char *dest, const char *src);
 
 int main(void) {
+
+    // 리터럴은 수정하면 무조건 UB.. 항상 const!!
+    // 수정할 문자열은 항상 배열로
+    char *line1 = "abc";
+    char *line2 = "def";
+
+    char line1[32] = "abc";
+    const char *line2 = "def";
+
+    printf("%zu\n", ustrlen(line1));
+    printf("%d\n", ustrcmp(line1, line2));
+    printf("%s\n", ustrcat(line1, line2));
+    printf("%s\n", ustrcpy(line1, line2));
 
     return 0;
 }
@@ -40,28 +53,16 @@ size_t ustrlen(const char *str) {
         p++;
     }
 
-    return p - str;
+    return (size_t)(p - str);
 }
-
-// size_t ustrlen(const char *str) {
-//     char *p = &str;              // 이미 str은 포인터..
-//     size_t len = 0;
-
-//     while (*p != '\0') {
-//         len++;
-//         *p++;                  // 이건 포인터를 옮기는 것이 아닌, 값을 읽고 버림
-//     }
-
-//     return len;
-// }
 
 /*
 두 문자열 s1과 s2를 사전순으로 비교
 - 두 문자열 같으면 0, s1이 작으면 음수, 크면 양수
 */
 int ustrcmp(const char *s1, const char *s2) {
-    char *p1 = &s1;
-    char *p2 = &s2;
+    const char *p1 = s1;
+    const char *p2 = s2;
 
     while (*p1 != '\0' && *p1 == *p2) {
         p1++;
@@ -74,15 +75,34 @@ int ustrcmp(const char *s1, const char *s2) {
 /*
 3. src 문자열을 dest 문자열 끝에 연결 (Pointer 사용)
 */
-void ustrcat(char *dest, const char *src) {
-    int len = ustrlen(dest);
-    char *pd = &dest;
-    char *ps = &src;
+char *ustrcat(char *dest, const char *src) {
+    size_t len = ustrlen(dest);
+    char *pd = dest;
+    const char *ps = src;
 
     pd = pd + len;
     while (*ps != '\0') {
         *pd++ = *ps++;
     }
+
+    // 마지막에 sentinel 꼭 붙여주기~
+    *pd = '\0';
+
+    return dest;
 }
 
-char *ustrcpy(char *dest, const char *src);
+/*
+4. src 문자열을 dest 문자열에 덮어씌움
+*/
+char *ustrcpy(char *dest, const char *src) {
+    char *pd = dest;
+    const char *ps = src;
+
+    while (*ps != '\0') {
+        *pd++ = *ps++;
+    }
+
+    *pd = '\0';
+
+    return dest;
+}

@@ -1,5 +1,5 @@
 ```bash
-gcc -Wall -Wextra -Wconversion -std=c17 -g -fsanitize=address -o main main.c && ./main
+gcc -Wall -Wextra -Wconversion -Werror -std=c17 -g -fsanitize=address -o main main.c && ./main
 ./out                 # 두 줄 모두 화면에 보임
 ./out > result.txt    # 화면에는 "에러 메시지"만 보임
 cat result.txt        # "정상 결과"만 들어 있음
