@@ -779,7 +779,7 @@ int main(void)
 ## 44-2. strlen(const char *str);
   - '\0' 문자를 만날 때까지의 문자 개수 리턴
 
-## 44-3. '\n', '\0', NULL
+## 44-3. '\n', '\0', NULL (sentinel)
   - '\n' : 줄바꿈 (LF)  10
   - '\0' : 널 문자      0
   - NULL : 널 포인터    아무것도 가리키지 않는 주소
@@ -831,3 +831,13 @@ int main(void)
     ```
     - s가 현재 가리키는 문자를 d에 쓴 이후 d, s 각각 이동
   - *p++, (*p)++, *++p 도 체크
+
+## 45-5. literal vs array
+  - 리터럴은 수정하면 무조건 UB.. 항상 const!!
+  - 수정할 문자열은 항상 배열로
+  ```c
+    char line1[32] = "abc";
+    const char *line2 = "def";
+  ```
+
+## 45-6. 문자열 마지막에 항상 sentinel 붙여주기
