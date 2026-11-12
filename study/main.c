@@ -9,37 +9,64 @@ Jennifer Lopez
 
 */
 
+#include <stdbool.h>
 #include <stdio.h>
+#include <string.h>
 
-int read_line(const char *prompt, char *buf, size_t size);
+#define BUF_SIZE 100
+
+// 문자열을 입력받아 배열에 담기
+bool read_line(const char *prompt, char *buf, size_t size);
 
 int main(void) {
-    char *first_name[100];
-    char *last_name[100];
+    // 이렇게 사용하면 VLA. 크기가 고정된 배열은 define 사용
+    // int size = 100;
+    char first_name[BUF_SIZE];
+    char last_name[BUF_SIZE];
 
     // 성 입력 받기
-    printf("* 성씨를 입력하시오 : ");
-    fflush(stdout);
-    if (fgets(last_name, sizeof last_name, stdin) == NULL) {
-        fprintf(stderr, "잘못 입력");
-        return 1;
+    if (read_line("* 성씨를 입력하시오 : ", last_name, sizeof last_name)) {
+        return 0;
     }
-
-    // 마지막에 꼭 '\0' 붙이기!!!
-    last_name[strcspn(last_name, "\n")] = '\0';
-
     // 이름 입력 받기
-    printf("* 이름을 입력하시오 : ");
-    fflush(stdout);
-    if (fgets(first_name, sizeof first_name, stdin) == NULL) {
-        fprintf(stderr, "잘못 입력");
-        return 1;
+    if (read_line("* 이름을 입력하시오 : ", first_name, sizeof first_name)) {
+        return 0;
     }
 
-    first_name[strcspn(first_name, "\n")] = '\0';
+    // 배열 수 세기
+    int l_len = strlen(last_name);
+    int f_len = strlen(first_name);
+
+    // 값 출력 - *은 출력폭을 인자로 받음
+    printf("%s %s\n", first_name, last_name);
+    printf("%*d %*d\n", f_len, f_len, l_len, l_len);
 
     return 0;
 }
 
-int read_line(const char *prompt, char *buf, size_t size) {
+/*
+사용자의 입력을 받고 배열에 담는 함수
+성공하면 true, EOF 등 실패하면 false
+prompt : 화면에 보여줄 질문
+buf : 입력 담을 배열
+size : 배열의 바이트
+*/
+bool read_line(const char *prompt, char *buf, size_t size) {
+
+    // printf(prompt);  => 이렇게 쓰면 prompt를 문자 서식으로 인식한다!!!
+    // 1.
+    // printf("%s", prompt);
+    // fflush(stdout);
+    // 2.
+    fputs(prompt, stdout);
+
+    // sizeof buf가 아닌 sizeof size를 쓰는 이유는??
+    if (fgets(buf, size, stdin) == NULL) {
+        fprintf(stderr, "실패");
+        return 0;
+    }
+
+    buf[strcspn(buf, "\n")] = '\0';
+
+    return 1;
 }
