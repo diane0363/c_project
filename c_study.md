@@ -758,10 +758,10 @@ int main(void)
   - 배열의 주소가 포인터로 넘어갈 때 길이 정보는 사라진다.
     -> 길이를 따로 넘기거나, 끝 표시 (sentinel) 를 두거나.
 
-## 43-1. fgets(buf, sizeof buf, stdin)
+## 43-1. fgets(buf, sizeof buf, stdin) ***
   - 한 줄을 입력받을 때 사용
   - 최대 sizeof buf - 1글자를 읽고, 항상 끝에 '\0'
-  - 줄이 들어갈 자리가 있으면 '\n'까지 buf에 들어감
+  - 자리가 있으면 '\n'까지 buf에 들어감 => strcspn(buf, "\n") 사용 가능
   - 줄이 너무 길면 나머지는 입력 버퍼에 남는다. (35-2 참고)
   - 반환값이 NULL이면 아무것도 읽지 못한 것
 
@@ -773,6 +773,7 @@ int main(void)
 ## 44-1. fgets 의 '\n' - strcspn(const char *str1, const char *str2)
   - <string.h> 내장
   - str2 문자열에 포함된 문자가 나오기 전까지의 길이 반환
+  - STR + C(COMPLEMENT; 여집합) + SPAN(구간)
   - buf[strcspn(buf, "\n")] = '\0' 으로 변환 가능
   - strspn() 의 경우, 두번째 문자열이 있는 첫번째 문자열 길이 반환
 
@@ -841,3 +842,36 @@ int main(void)
   ```
 
 ## 45-6. 문자열 마지막에 항상 sentinel 붙여주기
+
+## 46-1. %* : 출력폭을 인자로 넘긴다.
+  - *에 대응하는 인자는 반드시 int
+
+  ```c
+  printf("[%5d]\n", 8);     /* [    8]  폭 5칸, 오른쪽 정렬 */
+  printf("[%*d]\n", 5, 8);  /* [    8]  폭을 인자로 받음 */
+  printf("[%-*d]\n", 5, 8); /* [8    ]  '-'는 왼쪽 정렬 */
+  ```
+
+## 46-2. %. : 폭과 정밀도
+  - . 이 있으면 정밀도 (최대 n개)
+  - . 이 없으면 폭    (최소 n개)
+
+  ```c
+  printf("[%10s]\n", name);  /* "  Jennifer" */
+  printf("[%.3s]\n", name);  /* "Jen" */
+  ```
+
+## 46-3. size of : 바이트 수를 알려주는 연산자
+  - 컴파일할 때 컴파일러가 숫자로 바꿔넣어준다. => 함수XX
+  - 때문에, 함수 안에서 사용했을 때 배열이 아닌 포인터로 인식이 되면서 8로만 리턴!!!
+  ```c
+  char buf[100];
+  int  arr[10];
+  char *p = buf;
+
+  sizeof buf       /* 100 — char 100개 × 1바이트 */
+  sizeof arr       /* 40  — int 10개 × 4바이트 (10이 아님!) */
+  sizeof arr[0]    /* 4   — int 하나 */
+  sizeof p         /* 8   — 포인터 변수 자체의 크기 */
+  sizeof(int)      /* 4   — 타입에는 괄호 필수 */
+  ```
