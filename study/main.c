@@ -29,42 +29,64 @@ int main(void) {
 
 /*
 배열의 문자열들을 오름차순으로 정렬
+- 교환 법칙
 */
 void strSort(char (*word)[20]) {
-    word
+    char tmp[20];
+
+    // CNT만큼 반복
+    // CNT는 define으로 정의된거니까 그냥 여기서 써도 되나? 가능
+    for (int i = 0; i < CNT - 1; i++) {
+        for (int j = 0; j < CNT - 1; j++) {
+            // 오름차순대로 비교
+            if (ustrcmp(word[j], word[j + 1]) > 0) {
+                // 값 변경
+                // 값 변경할 때 문자열 복붙을 해야하나? 그냥 가리키는 주소만 바꾸면 안 되나? 불가능
+                // 가리키는 주소같은건 없다.!!!!!!!!!!!
+                ustrcpy(tmp, word[j]);
+                ustrcpy(word[j], word[j + 1]);
+                ustrcpy(word[j + 1], tmp);
+            }
+        }
+    }
 }
 
 /*
 문자열을 출력
 */
 void strOutput(char (*word)[20]) {
-    int n = CNT;
-    while (n) {
-        fputs(*word, stdout);
-        word++;
-        n--;
+
+    for (int i = 0; i < CNT; i++) {
+        if (i > 0) {
+            fputs("  ", stdout);
+        }
+        fputs(word[i], stdout);
     }
+    // putchar : stdout에 문자 추가
+    putchar('\n');
 }
 
+/*
+문자열 비교 함수
+*/
 int ustrcmp(const char *s1, const char *s2) {
-    while (*s1 != '\0' && *s2 != '\0') {
-        if (*s1 == *s2) {
-            s1++;
-            s2++;
-        } else {
-            return *s1 - *s2; // char 자체로 뺌
-        }
+
+    while (*s1 != '\0' && *s1 == *s2) {
+        s1++;
+        s2++;
     }
-    return 0;
+
+    return *s1 - *s2; // char 자체로 뺌
 }
 
 /*
 문자열 복사 함수
 */
 char *ustrcpy(char *dest, const char *src) {
-    while (*src != '\0') {
-        *dest++ = *src++;
+    char *p = dest;
+
+    while ((*p++ = *src++) != '\0') {
     }
 
-    return dest; // 움직인 dest 반환...
+    return dest;
 }
