@@ -967,3 +967,18 @@ int main(void)
   - 정상 종료(return, exit) 시 남은 버퍼 출력 / 크래시 시 사라짐
   - '\n' 없는 프롬프트 → fflush(stdout)
   - 디버깅 메시지 → fprintf(stderr, ...) (버퍼 없음, 즉시 출력)
+
+## 48-1. system("cls"); -> printf("\033[2J");
+  - 리눅스에서는 cls가 아닌 clear
+  - system() 은 셀 프로그램을 새로 실행해 명령을 돌리기 때문에 화면 하나를 지우기 위해 프로세스를 띄우는 일은 무겁기만함
+
+## 48-2. 커서를 옮기는 기능 ncurses라이브러리 혹은 ANSI 시퀀스 사용
+  - ANSI 이스케이프 시퀀스
+    - \033(8진수 33)은 ESC 문자
+    - ESC로 시작하는 특정 글자 묶음 -> 명령으로 실행
+    - stdout에 쓰는 글자이므로 화면에 반영X -> fflush(stdout)
+
+## 48-3. SDL(Simple DirectMedia Layer)
+  - "창을 띄우고, 그림을 그리고, 키 입력을 받고, 소리를 내는 일"을 OS마다 따로 짤 필요 없게 해 주는 라이브러리
+  - 리눅스, macOS, Windows, iOS, Android 등 여러 플랫폼에서 오디오, 키보드, 마우스, 조이스틱, 그래픽 하드웨어에 저수준으로 접근할 수 있게 해 주는 C 라이브러리
+  - Valve의 Steam과 Source 2, Unity 엔진, 수많은 게임과 에뮬레이터가 플랫폼 차이를 감추기 위해 사용
